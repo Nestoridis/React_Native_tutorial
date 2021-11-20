@@ -21,7 +21,7 @@ const CustomButton = ({
 }) => {
   const [focused, setFocused] = useState(false);
 
-  const getFlexDirection = () => {
+  const getFlexDirection = (icon, iconPosition) => {
     if (icon && iconPosition) {
       if (iconPosition === 'left') {
         return 'row';
@@ -48,7 +48,7 @@ const CustomButton = ({
   return (
     <TouchableOpacity
       disable={disable}
-      omPress={onPress}
+      onPress={onPress}
       style={[styles.wrapper, {backgroundColor: getbackgroundColor()}]}>
       <View style={[styles.loaderSection]}>
         {loading && (

@@ -1,21 +1,46 @@
 import React from 'react';
-import {useState} from 'react';
-import {View, Text} from 'react-native';
+import {useState, useContext, useEffect} from 'react';
 import RegisterComponent from '../../components/SingUp';
+import axios from './../../helpers/axiosInterceptor';
+import register, {clearAuthState} from '../../context/actions/auth/register';
+import {GlobalContext} from './../../context/Provider';
+import {LOGIN} from './../../constants/routeNames';
+import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Register = () => {
   const [form, setForm] = useState({});
   const [errors, setErrors] = useState({});
+  const {navigate} = useNavigation();
+  const {
+    authDispatch,
+    authState: {error, loading, data},
+  } = useContext(GlobalContext);
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        if (data || error) {
+          clearAuthState()(authDispatch);
+        }
+      };
+    }, [data, error]),
+  );
+
+  React.useEffect(() => {
+    if (data) {
+      navigate(LOGIN);
+    }
+  }, [data]);
 
   const onChange = ({name, value}) => {
     setForm({...form, [name]: value});
     if (value !== '') {
       if (name === 'password') {
-        if (value.length < 6) {
+        if (value.length < 7) {
           setErrors(prev => {
             return {
               ...prev,
-              [name]: 'The password must have more than 6 characters',
+              [name]: 'The password must have more than 8 characters',
             };
           });
         } else {
@@ -37,7 +62,8 @@ const Register = () => {
 
   const onSubmit = () => {
     //validations
-    console.log('form : >>', form);
+    
+    //console.log('form : >>', form);
     if (!form.userName) {
       setErrors(prev => {
         return {...prev, userName: 'Please add a username'};
@@ -63,6 +89,14 @@ const Register = () => {
         return {...prev, password: 'Please add a password'};
       });
     }
+
+    if (
+      Object.values(form).length === 5 &&
+      Object.values(form).every(item => item.trim().length > 0) &&
+      Object.values(errors).every(item => !item)
+    ) {
+      register(form)(authDispatch);
+    }
   };
 
   return (
@@ -71,6 +105,8 @@ const Register = () => {
       onChange={onChange}
       form={form}
       errors={errors}
+      error={error}
+      loading={loading}
     />
   );
 };

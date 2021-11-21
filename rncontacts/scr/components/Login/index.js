@@ -6,9 +6,13 @@ import styles from './styles';
 import CustomButton from './../../components/common/CustomButton';
 import {REGISTER} from './../../constants/routeNames';
 import {useNavigation} from '@react-navigation/native';
+import Message from './../common/Message/index';
 
-const LoginComponent = () => {
+const LoginComponent = ({onSubmit, onChange, form, loading, error}) => {
+  const [isSecureEntry, setIsSecureEntry] = React.useState(true);
+
   const {navigate} = useNavigation();
+
   return (
     <Container>
       <Image
@@ -20,18 +24,48 @@ const LoginComponent = () => {
       <View>
         <Text style={styles.title}> Welcome to RNContacts</Text>
         <Text style={styles.subTitle}> Please Login here</Text>
-
         <View style={styles.form}>
-          <Input label="Username" placeholder="Enter username" />
+          {error && !error?.error && (
+            <Message
+              danger
+              onDismiss={() => {}}
+              message="Invalid credentials"
+            />
+          )}
+          {error?.error && <Message danger onDismiss message={error?.error} />}
+
+          <Input
+            label="Username"
+            placeholder="Enter username"
+            onChangeText={value => {
+              onChange({name: 'userName', value});
+            }}
+          />
 
           <Input
             label="Password"
             placeholder="Enter password"
-            secureTextEntry={true}
-            icon={<Text>Show</Text>}
+            secureTextEntry={isSecureEntry}
+            icon={
+              <TouchableOpacity
+                onPress={() => {
+                  setIsSecureEntry(prev => !prev);
+                }}>
+                <Text>{isSecureEntry ? 'Show' : 'Hide'}</Text>
+              </TouchableOpacity>
+            }
             iconPosition="right"
+            onChangeText={value => {
+              onChange({name: 'password', value});
+            }}
           />
-          <CustomButton title="Submit" primary={true} />
+          <CustomButton
+            primary
+            title="Submit"
+            loading={loading}
+            disabled={loading}
+            onPress={onSubmit}
+          />
           <View style={styles.createSection}>
             <Text style={styles.infoText}>Need a new account</Text>
             <TouchableOpacity

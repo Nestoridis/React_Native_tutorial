@@ -15,6 +15,7 @@ const AppNavContainer = () => {
 
   const getUser = async () => {
     setauthLoaded(true);
+    setisAuthenticated(false);
     try {
       const user = await AsyncStorage.getItem('@user');
       console.log('user', user);
@@ -38,9 +39,9 @@ const AppNavContainer = () => {
   console.log('state :>>', isAuthenticated);
   return (
     <>
-      {authLoaded ? (
+      { authLoaded ? (
         <NavigationContainer>
-          {isAuthenticated ? <DrawerNavigator /> : <AuthNavigator />}
+          { isAuthenticated ? <DrawerNavigator /> : <AuthNavigator />}
         </NavigationContainer>
       ) : (
         <ActivityIndicator />

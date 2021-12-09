@@ -1,4 +1,4 @@
-import axiosInstance from '../../../helpers/axiosInterceptor';
+import axiosInstance from '../../../helpers/axiosInstance';
 import {
   REGISTER_LOADING,
   REGISTER_SUCCESS,
@@ -19,7 +19,8 @@ export default ({
     firstName: first_name,
     lastName: last_name,
   }) =>
-  dispatch => {
+  dispatch =>
+  onSuccess => {
     dispatch({type: REGISTER_LOADING});
     axiosInstance
       .post('/auth/register', {
@@ -31,6 +32,7 @@ export default ({
       })
       .then(res => {
         dispatch({type: REGISTER_SUCCESS, payload: res.data});
+        onSuccess(res.data);
       })
       .catch(err => {
         dispatch({

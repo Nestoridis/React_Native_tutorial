@@ -7,14 +7,14 @@ import contactsInitialState from './initialStates/contactsInitialState';
 export const GlobalContext = createContext({});
 const GlobalProvider = ({children}) => {
   const [authState, authDispatch] = useReducer(auth, authInitialState);
-  const [contactState, contactDispatch] = useReducer(
+  const [contactsState, contactsDispatch] = useReducer(
     contacts,
     contactsInitialState,
   );
 
   return (
     <GlobalContext.Provider
-      value={{authState, contactState, authDispatch, contactDispatch}}>
+      value={{authState, contactsState, authDispatch, contactsDispatch}}>
       {children}
     </GlobalContext.Provider>
   );

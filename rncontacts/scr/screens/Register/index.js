@@ -1,7 +1,7 @@
 import React from 'react';
 import {useState, useContext, useEffect} from 'react';
 import RegisterComponent from '../../components/SingUp';
-import axios from './../../helpers/axiosInterceptor';
+import axios from './../../helpers/axiosInstance';
 import register, {clearAuthState} from '../../context/actions/auth/register';
 import {GlobalContext} from './../../context/Provider';
 import {LOGIN} from './../../constants/routeNames';
@@ -25,12 +25,6 @@ const Register = () => {
       };
     }, [data, error]),
   );
-
-  React.useEffect(() => {
-    if (data) {
-      navigate(LOGIN);
-    }
-  }, [data]);
 
   const onChange = ({name, value}) => {
     setForm({...form, [name]: value});
@@ -62,7 +56,7 @@ const Register = () => {
 
   const onSubmit = () => {
     //validations
-    
+
     //console.log('form : >>', form);
     if (!form.userName) {
       setErrors(prev => {
@@ -95,7 +89,9 @@ const Register = () => {
       Object.values(form).every(item => item.trim().length > 0) &&
       Object.values(errors).every(item => !item)
     ) {
-      register(form)(authDispatch);
+      register(form)(authDispatch)(response => {
+        navigate(LOGIN, {data: response});
+      });
     }
   };
 

@@ -11,6 +11,7 @@ import Container from '../../components/common/Container/index';
 import styles from '../SideMenu/styles';
 import {SETTINGS} from '../../constants/routeNames';
 import logoutUser from '../../context/actions/auth/logoutUser';
+import Icon from './../../components/common/Icon/index';
 
 const SideMenu = ({navigation, authDispatch}) => {
   const handleLogout = () => {
@@ -28,14 +29,14 @@ const SideMenu = ({navigation, authDispatch}) => {
 
   const menuItems = [
     {
-      icon: <Text>T</Text>,
+      icon: <Icon type="fontisto" size={21} name="player-settings" />,
       name: 'Setings',
       onPress: () => {
         navigation.navigate(SETTINGS);
       },
     },
     {
-      icon: <Text>T</Text>,
+      icon: <Icon type="material" size={21} name="logout" />,
       name: 'LogOut',
       onPress: handleLogout,
     },

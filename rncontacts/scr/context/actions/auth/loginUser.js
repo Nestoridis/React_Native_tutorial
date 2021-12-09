@@ -1,4 +1,4 @@
-import axiosInstance from '../../../helpers/axiosInterceptor';
+import axiosInstance from '../../../helpers/axiosInstance';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   LOGIN_START,
